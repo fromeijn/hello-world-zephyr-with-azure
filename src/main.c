@@ -7,21 +7,20 @@
 #include <zephyr.h>
 #include <sys/printk.h>
 
-#include <stdio.h>
-
 #include <azure/core/az_json.h>
 #include <azure/core/az_result.h>
 #include <azure/core/az_span.h>
 
 void main(void)
 {
-	printk("Hello World! %s\n", CONFIG_BOARD);
+	printk("Hello World!\n", CONFIG_BOARD);
 
 	az_span my_first_span = AZ_SPAN_FROM_STR("Hello Azure");
-	printk("%s\n", az_span_ptr(my_first_span));
+	// use size for printing az_span (since it is not 0 terminated.)
+	printk("%.*s\n", az_span_size(my_first_span), az_span_ptr(my_first_span));
 
-	uint8_t buffer[200] = { 0 };
-	az_json_writer writer = { 0 };
+	uint8_t buffer[200] = {0};
+	az_json_writer writer = {0};
 
 	az_result result = az_json_writer_init(&writer, AZ_SPAN_FROM_BUFFER(buffer), NULL);
 	// {
